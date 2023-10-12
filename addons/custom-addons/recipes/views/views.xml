@@ -1,0 +1,66 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="recipes.form">
+      <field name="name">recipes form</field>
+      <field name="model">recipes.recipes</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="description"/>
+              <field name="ingredients_ids"/>
+              <!-- Add other fields you want to display in the form view -->
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="recipes.list">
+      <field name="name">recipes list</field>
+      <field name="model">recipes.recipes</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="description"/>
+          <field name="ingredients_ids"/>
+          <field name="total_calories"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="recipes.action_window">
+      <field name="name">recipes window</field>
+      <field name="res_model">recipes.recipes</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+    <record model="ir.actions.server" id="recipes.action_server">
+      <field name="name">recipes server</field>
+      <field name="model_id" ref="model_recipes_recipes"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+    <!-- Top menu item -->
+    <menuitem name="recipes" id="recipes.menu_root"/>
+    <!-- menu categories -->
+    <menuitem name="Menu 1" id="recipes.menu_1" parent="recipes.menu_root"/>
+    <menuitem name="Menu 2" id="recipes.menu_2" parent="recipes.menu_root"/>
+    <!-- actions -->
+    <menuitem name="List" id="recipes.menu_1_list" parent="recipes.menu_1"
+              action="recipes.action_window"/>
+    <menuitem name="Server to list" id="recipes" parent="recipes.menu_2"
+              action="recipes.action_server"/>
+  </data>
+</odoo>
